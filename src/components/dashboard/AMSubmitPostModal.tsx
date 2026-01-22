@@ -1,0 +1,192 @@
+import { useState } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { Loader2 } from "lucide-react";
+
+type SlideshowFormat = 'target_avoid' | 'best_betting_apps' | 'fraud_watch' | 'most_overbet';
+
+interface AMSubmitPostModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmitSuccess?: () => void;
+}
+
+const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPostModalProps) => {
+  const [tiktokUrl, setTiktokUrl] = useState("");
+  const [instagramUrl, setInstagramUrl] = useState("");
+  const [slideshowFormat, setSlideshowFormat] = useState<SlideshowFormat>('target_avoid');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { profile } = useUserProfile();
+
+  const validateTikTokUrl = (url: string): boolean => {
+    return url.includes('tiktok.com') || url.includes('vm.tiktok.com');
+  };
+
+  const validateInstagramUrl = (url: string): boolean => {
+    return url.includes('instagram.com');
+  };
+
+  const handleSubmit = async () => {
+    // Validation
+    if (!tiktokUrl.trim() || !instagramUrl.trim()) {
+      toast.error("Please enter both TikTok and Instagram URLs");
+      return;
+    }
+
+    if (!validateTikTokUrl(tiktokUrl)) {
+      toast.error("Invalid TikTok URL");
+      return;
+    }
+
+    if (!validateInstagramUrl(instagramUrl)) {
+      toast.error("Invalid Instagram URL");
+      return;
+    }
+
+    if (!profile) {
+      toast.error("User profile not loaded");
+      return;
+    }
+
+    // Get user's TikTok and Instagram accounts
+    const tiktokAccount = profile.accounts.find(acc => acc.platform === 'tiktok');
+    const instagramAccount = profile.accounts.find(acc => acc.platform === 'instagram');
+
+    if (!tiktokAccount || !instagramAccount) {
+      toast.error("Please add your TikTok and Instagram accounts first");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Insert both posts (TikTok + Instagram) as a slideshow pair
+      const { error } = await supabase
+        .from('posts')
+        .insert([
+          {
+            account_id: tiktokAccount.id,
+            submitted_by: profile.user.id,
+            url: tiktokUrl,
+            platform: 'tiktok',
+            status: 'approved',
+            content_type: 'slideshow',
+            slideshow_format: slideshowFormat,
+          },
+          {
+            account_id: instagramAccount.id,
+            submitted_by: profile.user.id,
+            url: instagramUrl,
+            platform: 'instagram',
+            status: 'approved',
+            content_type: 'slideshow',
+            slideshow_format: slideshowFormat,
+          }
+        ]);
+
+      if (error) throw error;
+
+      toast.success("Post submitted successfully!");
+
+      // Reset form
+      setTiktokUrl("");
+      setInstagramUrl("");
+      setSlideshowFormat('target_avoid');
+      onOpenChange(false);
+
+      // Trigger data refresh without full page reload
+      onSubmitSuccess?.();
+    } catch (error: any) {
+      console.error('Error submitting slideshow:', error);
+      toast.error(error.message || "Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-lg bg-card border-border p-8">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Submit Post</h2>
+          <p className="text-muted-foreground text-sm">
+            Enter both TikTok and Instagram URLs<br />
+            for your post.
+          </p>
+        </div>
+
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <Label className="text-foreground text-sm">
+              Slideshow Format
+            </Label>
+            <Select value={slideshowFormat} onValueChange={(v: SlideshowFormat) => setSlideshowFormat(v)}>
+              <SelectTrigger className="bg-secondary border-border h-12">
+                <SelectValue placeholder="Select format" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="target_avoid">Target/Avoid</SelectItem>
+                <SelectItem value="best_betting_apps">Best Betting Apps</SelectItem>
+                <SelectItem value="fraud_watch">FraudWatch</SelectItem>
+                <SelectItem value="most_overbet">Most Overbet</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tiktokUrl" className="text-foreground text-sm">
+              TikTok URL
+            </Label>
+            <Input
+              id="tiktokUrl"
+              value={tiktokUrl}
+              onChange={(e) => setTiktokUrl(e.target.value)}
+              className="bg-secondary border-border h-12"
+              placeholder="https://www.tiktok.com/@username/video/..."
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="instagramUrl" className="text-foreground text-sm">
+              Instagram URL
+            </Label>
+            <Input
+              id="instagramUrl"
+              value={instagramUrl}
+              onChange={(e) => setInstagramUrl(e.target.value)}
+              className="bg-secondary border-border h-12"
+              placeholder="https://www.instagram.com/p/..."
+            />
+          </div>
+
+          <div className="bg-secondary/50 rounded-lg p-4 text-sm text-muted-foreground text-center">
+            <p>Post the same slideshow to both platforms to track your progress</p>
+          </div>
+
+          <Button
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium disabled:opacity-50"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              "Submit Slideshow"
+            )}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default AMSubmitPostModal;

@@ -1,0 +1,247 @@
+@import './fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 228 15% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 225 15% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 225 15% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Lastr Purple - #8B5CF6 */
+    --primary: 262 83% 66%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 225 15% 15%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 225 15% 18%;
+    --muted-foreground: 215 20% 55%;
+
+    /* Lastr Purple accent */
+    --accent: 262 83% 66%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 225 15% 18%;
+    --input: 225 15% 18%;
+    --ring: 262 83% 66%;
+
+    --radius: 0.75rem;
+
+    /* Lastr Purple for charts */
+    --chart-line: 262 83% 66%;
+    --chart-area: 262 83% 66%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 262 83% 66%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 262 83% 66%;
+  }
+
+  .dark {
+    --background: 228 15% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 225 15% 10%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 225 15% 10%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Lastr Purple - #8B5CF6 */
+    --primary: 262 83% 66%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 225 15% 15%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 225 15% 18%;
+    --muted-foreground: 215 20% 55%;
+
+    /* Lastr Purple accent */
+    --accent: 262 83% 66%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 225 15% 18%;
+    --input: 225 15% 18%;
+    --ring: 262 83% 66%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 262 83% 66%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 262 83% 66%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-xl border border-border/50 rounded-xl;
+  }
+
+  .stat-glow {
+    box-shadow: 0 0 40px -10px hsl(var(--primary) / 0.3);
+  }
+
+  .gradient-border {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.3), transparent);
+  }
+
+  /* Homepage styles */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    line-height: 2;
+  }
+
+  .gradient-text {
+    background: linear-gradient(75deg, #ffffff, #a9a9a9);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-gradient {
+    background: radial-gradient(
+      circle at 50% 50%,
+      rgba(139, 92, 246, 0.15) 0%,
+      rgba(12, 12, 12, 0) 70%
+    );
+  }
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+}
+
+/* Shimmer animation for CTA button */
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* iOS Safe Area Insets for notch/home indicator */
+@supports (padding: max(0px)) {
+  :root {
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar while keeping scroll functionality */
+  .scrollbar-none {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }
+
+  /* Safe area padding utilities */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pl-safe {
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+  .pr-safe {
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  .px-safe {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  .py-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Safe area margin utilities */
+  .mt-safe {
+    margin-top: env(safe-area-inset-top, 0px);
+  }
+  .mb-safe {
+    margin-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .ml-safe {
+    margin-left: env(safe-area-inset-left, 0px);
+  }
+  .mr-safe {
+    margin-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Bottom position offset for fixed elements */
+  .bottom-safe {
+    bottom: max(1.5rem, calc(env(safe-area-inset-bottom, 0px) + 1rem));
+  }
+  .right-safe {
+    right: max(1.5rem, calc(env(safe-area-inset-right, 0px) + 1rem));
+  }
+}

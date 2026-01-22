@@ -1,0 +1,2 @@
+# Disable JWT verification - called from frontend with anon key
+verify_jwt = false

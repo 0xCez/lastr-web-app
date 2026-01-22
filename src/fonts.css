@@ -1,0 +1,71 @@
+/* Aeonik Font Family - Optimized WOFF2 */
+
+/* Thin - 100 */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Thin.woff2') format('woff2'),
+       url('/fonts/Aeonik-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Air - 200 */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Air.woff2') format('woff2'),
+       url('/fonts/Aeonik-Air.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Light - 300 */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Light.woff2') format('woff2'),
+       url('/fonts/Aeonik-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Regular - 400 */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Regular.woff2') format('woff2'),
+       url('/fonts/Aeonik-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Medium - 500 */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Medium.woff2') format('woff2'),
+       url('/fonts/Aeonik-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bold - 700 */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Bold.woff2') format('woff2'),
+       url('/fonts/Aeonik-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Black - 900 */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('/fonts/Aeonik-Black.woff2') format('woff2'),
+       url('/fonts/Aeonik-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

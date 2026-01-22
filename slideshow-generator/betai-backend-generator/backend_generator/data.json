@@ -1,0 +1,78 @@
+{
+    "hooks": [
+      "These are the 5 tools I use on every single bet.",
+      "If you bet without these apps, you're leaving money on the table.",
+      "I only trust these 5 tools before placing any bet.",
+      "This is how I turned betting chaos into a system.",
+      "These 5 apps are open every time I place a bet.",
+      "Stop betting blind. Start betting smart.",
+      "Before any bet, I always check these apps.",
+      "If you track your bets, you instantly get better.",
+      "Serious bettors don't guess — they use these tools.",
+      "These tools changed how I look at every line."
+    ],
+  
+    "apps": {
+      "betai": { "name": "Bet.AI" },
+  
+      "betanalytix": { "name": "Bet-Analytix" },
+      "betspark": { "name": "BetSpark" },
+      "bettingtips": { "name": "Betting Tips" },
+      "betty": { "name": "Betty" },
+      "blearcherreport": { "name": "Bleacher Report" },
+      "gotips": { "name": "Go Tips" },
+      "hof": { "name": "HOF" },
+      "juicereel": { "name": "Juice Reel" },
+      "linemate": { "name": "Line Mate" },
+      "liveodds": { "name": "Live Odds" },
+      "matchedbettingtracker": { "name": "Matched Betting Tracker" },
+      "mlb": { "name": "MLB" },
+      "nba": { "name": "NBA" },
+      "nfl": { "name": "NFL" },
+      "oddsjam": { "name": "OddsJam" },
+      "onefootball": { "name": "OneFootball" },
+      "optimalbet": { "name": "Optimal Bet" },
+      "pikkit": { "name": "Pikkit" },
+      "rotogrinders": { "name": "RotoGrinders" },
+      "scoresandodds": { "name": "ScoresAndOdds" },
+      "smartbets": { "name": "Smart Bets" },
+      "sofascore": { "name": "Sofascore" },
+      "tejtips": { "name": "TejTips" },
+      "thescore": { "name": "The Score" },
+      "ufc": { "name": "UFC" }
+    },
+  
+    "categories": [
+      {
+        "id": "odds_comparison",
+        "label": "Line Shopping & Odds",
+        "apps": ["oddsjam", "scoresandodds", "linemate", "optimalbet", "betai"]
+      },
+      {
+        "id": "ai_analysis",
+        "label": "AI Models & Analysis",
+        "apps": ["betai", "betanalytix", "smartbets", "optimalbet"]
+      },
+      {
+        "id": "stats_data",
+        "label": "Live Scores & Stats",
+        "apps": ["sofascore", "thescore", "liveodds", "blearcherreport", "rotogrinders", "betai"]
+      },
+      {
+        "id": "sharp_sentiment",
+        "label": "Sharp Money & Sentiment",
+        "apps": ["tejtips", "scoresandodds", "hof", "betai"]
+      },
+      {
+        "id": "bankroll_tools",
+        "label": "Bankroll & Tracking",
+        "apps": ["pikkit", "juicereel", "matchedbettingtracker", "betai"]
+      },
+      {
+        "id": "niche_sports",
+        "label": "Niche Sports Apps",
+        "apps": ["mlb", "nba", "nfl", "ufc", "onefootball"]
+      }
+    ]
+  }
+  

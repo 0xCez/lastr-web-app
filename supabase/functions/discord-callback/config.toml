@@ -1,0 +1,3 @@
+# Disable JWT verification for Discord OAuth callback
+# Discord redirects here without any auth headers
+verify_jwt = false
