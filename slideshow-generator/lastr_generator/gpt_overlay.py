@@ -77,6 +77,16 @@ ROUTES (provided in the JSON):
   Slides 2–5 each reveal ONE different reason for struggling with stamina (anxiety, overthinking,
   no practice, stress, poor breathing, lack of control). Each reason must be genuinely different.
   Tone = reflective, gen-z authentic, relatable.
+- "myth": hook busts a common myth (e.g. "90% of guys don't know this about lasting longer").
+  Slides 2–5 reveal surprising facts/myths about stamina, performance, and control that most guys
+  get wrong. Each slide busts a different myth or reveals a counterintuitive truth.
+  Tone = educational, eye-opening, "did you know" energy.
+- "killing": hook calls out bad habits (e.g. "Things killing your stamina right now").
+  Slides 2–5 each reveal ONE thing that hurts stamina (stress, poor sleep, no cardio, death grip,
+  anxiety, bad breathing). Each must be different. Tone = wake-up call, direct, no fluff.
+- "pov": hook is aspirational (e.g. "POV: you finally last as long as you want").
+  Slides 2–5 paint the picture of what life looks like after mastering control (confidence,
+  no anxiety, relaxed, she notices, you feel different). Tone = dreamy, aspirational, motivating.
 
 TEXT RULES:
 - Overlay text must stay ultra short: 1–2 punchy lines per slide (except final CTA).

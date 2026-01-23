@@ -120,6 +120,10 @@ interface LastrData {
 const LASTR_ROUTES = [
   { code: "tips", name: "Tips (Instructive)" },
   { code: "story", name: "Story (Emotional)" },
+  { code: "reasons", name: "Reasons (Reflective)" },
+  { code: "myth", name: "Myth Buster (Educational)" },
+  { code: "killing", name: "Killing You (Wake-up)" },
+  { code: "pov", name: "POV (Aspirational)" },
 ];
 
 interface ProfileData {
@@ -1278,9 +1282,19 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
             <div className="glass-card p-4">
               <div className="flex items-center justify-center gap-2">
                 <span className={`text-sm px-3 py-1 rounded-full font-medium ${
-                  lastrData.route === 'tips' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'
+                  lastrData.route === 'tips' ? 'bg-blue-500/20 text-blue-400' :
+                  lastrData.route === 'reasons' ? 'bg-amber-500/20 text-amber-400' :
+                  lastrData.route === 'myth' ? 'bg-green-500/20 text-green-400' :
+                  lastrData.route === 'killing' ? 'bg-red-500/20 text-red-400' :
+                  lastrData.route === 'pov' ? 'bg-cyan-500/20 text-cyan-400' :
+                  'bg-purple-500/20 text-purple-400'
                 }`}>
-                  {lastrData.route === 'tips' ? '📝 Tips Mode' : '💭 Story Mode'}
+                  {lastrData.route === 'tips' ? '📝 Tips Mode' :
+                   lastrData.route === 'reasons' ? '💡 Reasons Mode' :
+                   lastrData.route === 'myth' ? '🧠 Myth Buster Mode' :
+                   lastrData.route === 'killing' ? '⚠️ Killing You Mode' :
+                   lastrData.route === 'pov' ? '✨ POV Mode' :
+                   '💭 Story Mode'}
                 </span>
               </div>
             </div>

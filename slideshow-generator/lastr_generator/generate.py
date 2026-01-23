@@ -27,10 +27,16 @@ CATEGORIES = {
 }
 
 # Image sequences per format
+# Hook (slide 1) should be: aesthetic, stress, or muscle - NOT health (food pics)
+# Health = food/nutrition pics - use for middle slides only
+# CTA (last slide) = always app
 IMAGE_SEQUENCES = {
-    "tips": ["health", "muscle", "room", "couple", "health", "app"],
-    "story": ["stress", "room", "couple", "mirror", "stress", "app"],
-    "reasons": ["aesthetic", "room", "stress", "couple", "mirror", "app"],
+    "tips": ["muscle", "health", "room", "couple", "mirror", "app"],
+    "story": ["stress", "room", "couple", "mirror", "aesthetic", "app"],
+    "reasons": ["aesthetic", "stress", "room", "couple", "mirror", "app"],
+    "myth": ["muscle", "room", "health", "couple", "mirror", "app"],
+    "killing": ["stress", "health", "room", "mirror", "couple", "app"],
+    "pov": ["aesthetic", "couple", "mirror", "room", "muscle", "app"],
 }
 
 
@@ -69,9 +75,12 @@ def choose_route():
     Randomly choose between:
     - 'tips'      (5 tips to last longer)
     - 'story'     (emotional story about panic / control)
-    - 'reasons'   (all the reasons why I was addicted)
+    - 'reasons'   (all the reasons why I couldn't last)
+    - 'myth'      (90% of guys don't know this...)
+    - 'killing'   (things killing your stamina)
+    - 'pov'       (POV: you finally lasted)
     """
-    return random.choice(["tips", "story", "reasons"])
+    return random.choice(["tips", "story", "reasons", "myth", "killing", "pov"])
 
 
 # ------------------------------------------------------------
