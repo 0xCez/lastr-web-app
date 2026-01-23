@@ -482,6 +482,50 @@ serve(async (req) => {
     // Send welcome message to private channel
     if (channelId) {
       await sendWelcomeMessage(channelId, userData.full_name, userData.role)
+
+      // Schedule personalized follow-up messages for UGC creators
+      if (userData.role === 'ugc_creator') {
+        // Delays in minutes after Discord connect
+        // const VOICE_NOTE_DELAY_MINUTES = 5  // Commented out until voice note is ready
+        const TEXT_MESSAGE_DELAY_MINUTES = 7
+
+        // const voiceScheduledFor = new Date(Date.now() + VOICE_NOTE_DELAY_MINUTES * 60 * 1000)
+        const textScheduledFor = new Date(Date.now() + TEXT_MESSAGE_DELAY_MINUTES * 60 * 1000)
+
+        // Schedule voice note (5 min) - COMMENTED OUT until voice note is ready
+        // const { error: voiceError } = await supabase
+        //   .from('scheduled_voice_notes')
+        //   .insert({
+        //     channel_id: channelId,
+        //     user_name: userData.full_name,
+        //     user_id: state,
+        //     discord_user_id: discordUser.id,
+        //     scheduled_for: voiceScheduledFor.toISOString(),
+        //     message_type: 'voice',
+        //   })
+        // if (voiceError) {
+        //   console.error('Failed to schedule voice note:', voiceError)
+        // } else {
+        //   console.log(`Voice note scheduled for ${voiceScheduledFor.toISOString()}`)
+        // }
+
+        // Schedule text message (7 min)
+        const { error: textError } = await supabase
+          .from('scheduled_voice_notes')
+          .insert({
+            channel_id: channelId,
+            user_name: userData.full_name,
+            user_id: state,
+            discord_user_id: discordUser.id,
+            scheduled_for: textScheduledFor.toISOString(),
+            message_type: 'text',
+          })
+        if (textError) {
+          console.error('Failed to schedule text message:', textError)
+        } else {
+          console.log(`Text message scheduled for ${textScheduledFor.toISOString()}`)
+        }
+      }
     }
 
     // Notify admins that a new creator connected (in admin channel)

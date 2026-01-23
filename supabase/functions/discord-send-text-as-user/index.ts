@@ -72,13 +72,13 @@ serve(async (req) => {
 
     const message = `Hey ${greeting}
 
-Great to meet u i'm cesar one of the co-founders of Bet.AI.
+Great to meet u i'm cesar one of the co-founders of Lastr.
 
 Please - start by creating your TT & IG accounts.
 
-For TT: "${firstName.toLowerCase()}.bai"
+For TT: "${firstName.toLowerCase()}.lastr"
 
-For IG: "${firstName.toLowerCase()}.betai"
+For IG: "${firstName.toLowerCase()}.lastr"
 
 Then you can simply download the app here: https://testflight.apple.com/join/D824t57J
 
