@@ -8,9 +8,30 @@ from gpt_overlay import generate_overlay_and_hook
 # PATHS
 # ------------------------------------------------------------
 ROOT = Path(__file__).parent
-# Lastr_pics lives next to the Lastr/ directory, not inside it.
-PICS_ROOT = ROOT.parent.parent / "Lastr_pics"
+PICS_ROOT = ROOT.parent.parent / "public" / "images" / "Lastr_pics"
 OUTPUT_PATH = ROOT / "output.json"
+
+
+# ------------------------------------------------------------
+# IMAGE CATEGORIES
+# ------------------------------------------------------------
+CATEGORIES = {
+    "aesthetic": PICS_ROOT / "aesthetic",
+    "couple": PICS_ROOT / "Couple",
+    "health": PICS_ROOT / "Health",
+    "muscle": PICS_ROOT / "Muscle",
+    "room": PICS_ROOT / "Room",
+    "mirror": PICS_ROOT / "Mirror",
+    "stress": PICS_ROOT / "stress",
+    "app": PICS_ROOT / "App",
+}
+
+# Image sequences per format
+IMAGE_SEQUENCES = {
+    "tips": ["health", "muscle", "room", "couple", "health", "app"],
+    "story": ["stress", "room", "couple", "mirror", "stress", "app"],
+    "reasons": ["aesthetic", "room", "stress", "couple", "mirror", "app"],
+}
 
 
 # ------------------------------------------------------------
@@ -18,37 +39,24 @@ OUTPUT_PATH = ROOT / "output.json"
 # ------------------------------------------------------------
 
 def pick_random_image(folder: Path):
-    """Pick a random JPEG/JPG image from a folder."""
-    images = list(folder.glob("*.jpg")) + list(folder.glob("*.jpeg"))
+    """Pick a random image from a folder."""
+    images = (
+        list(folder.glob("*.jpg")) +
+        list(folder.glob("*.jpeg")) +
+        list(folder.glob("*.png"))
+    )
     if not images:
         raise Exception(f"No images found in: {folder}")
     return str(random.choice(images))
 
 
-def generate_image_sequence():
-    """Return 6 image paths following the TikTok carousel rules."""
-    breathing_folder = PICS_ROOT / "Breathing"
-    app_folder = PICS_ROOT / "App"
-    middle_candidates = [
-        PICS_ROOT / "Couple",
-        PICS_ROOT / "Muscle",
-        PICS_ROOT / "Psycho",
-        PICS_ROOT / "Room",
-    ]
-
+def generate_image_sequence(route: str):
+    """Return 6 image paths based on the route/format."""
+    sequence = IMAGE_SEQUENCES.get(route, IMAGE_SEQUENCES["story"])
     slides = []
-
-    # Slide 1 → Breathing
-    slides.append(pick_random_image(breathing_folder))
-
-    # Slides 2–5 → Routine/Anxiety/Backgrounds (random pick each time)
-    for _ in range(4):
-        folder = random.choice(middle_candidates)
+    for category in sequence:
+        folder = CATEGORIES[category]
         slides.append(pick_random_image(folder))
-
-    # Slide 6 → App
-    slides.append(pick_random_image(app_folder))
-
     return slides
 
 
@@ -61,8 +69,9 @@ def choose_route():
     Randomly choose between:
     - 'tips'      (5 tips to last longer)
     - 'story'     (emotional story about panic / control)
+    - 'reasons'   (all the reasons why I was addicted)
     """
-    return random.choice(["tips", "story"])
+    return random.choice(["tips", "story", "reasons"])
 
 
 # ------------------------------------------------------------
@@ -89,7 +98,7 @@ def build_input_structure(route, image_sequence):
 
 def generate_post():
     route = choose_route()
-    images = generate_image_sequence()
+    images = generate_image_sequence(route)
     input_json = build_input_structure(route, images)
 
     # Call GPT

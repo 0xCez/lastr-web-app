@@ -73,6 +73,10 @@ ROUTES (provided in the JSON):
   micro-tips (breathing, rhythm, mental control, tension). Tone = instructive.
 - "story": hook is fear-based/emotional. Slides 2–5 tell a narrative:
   panic → tension → shame → realization → Lastr solution. Tone = emotional.
+- "reasons": hook is self-discovery (e.g. "All the reasons why I couldn't last").
+  Slides 2–5 each reveal ONE different reason for struggling with stamina (anxiety, overthinking,
+  no practice, stress, poor breathing, lack of control). Each reason must be genuinely different.
+  Tone = reflective, gen-z authentic, relatable.
 
 TEXT RULES:
 - Overlay text must stay ultra short: 1–2 punchy lines per slide (except final CTA).
