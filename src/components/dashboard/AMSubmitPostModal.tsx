@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Loader2 } from "lucide-react";
 
-type SlideshowFormat = 'target_avoid' | 'best_betting_apps' | 'fraud_watch' | 'most_overbet';
+type SlideshowFormat = 'tips' | 'story' | 'reasons' | 'myth' | 'killing' | 'pov';
 
 interface AMSubmitPostModalProps {
   open: boolean;
@@ -19,7 +19,7 @@ interface AMSubmitPostModalProps {
 
 const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPostModalProps) => {
   const [tiktokUrl, setTiktokUrl] = useState("");
-  const [slideshowFormat, setSlideshowFormat] = useState<SlideshowFormat>('target_avoid');
+  const [slideshowFormat, setSlideshowFormat] = useState<SlideshowFormat>('tips');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { profile } = useUserProfile();
 
@@ -74,7 +74,7 @@ const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPost
 
       // Reset form
       setTiktokUrl("");
-      setSlideshowFormat('target_avoid');
+      setSlideshowFormat('tips');
       onOpenChange(false);
 
       // Trigger data refresh without full page reload
@@ -107,10 +107,12 @@ const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPost
                 <SelectValue placeholder="Select format" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="target_avoid">Target/Avoid</SelectItem>
-                <SelectItem value="best_betting_apps">Best Betting Apps</SelectItem>
-                <SelectItem value="fraud_watch">FraudWatch</SelectItem>
-                <SelectItem value="most_overbet">Most Overbet</SelectItem>
+                <SelectItem value="tips">Tips (Instructive)</SelectItem>
+                <SelectItem value="story">Story (Emotional)</SelectItem>
+                <SelectItem value="reasons">Reasons (Reflective)</SelectItem>
+                <SelectItem value="myth">Myth Buster (Educational)</SelectItem>
+                <SelectItem value="killing">Killing You (Wake-up)</SelectItem>
+                <SelectItem value="pov">POV (Aspirational)</SelectItem>
               </SelectContent>
             </Select>
           </div>
