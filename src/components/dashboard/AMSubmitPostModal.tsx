@@ -19,7 +19,6 @@ interface AMSubmitPostModalProps {
 
 const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPostModalProps) => {
   const [tiktokUrl, setTiktokUrl] = useState("");
-  const [instagramUrl, setInstagramUrl] = useState("");
   const [slideshowFormat, setSlideshowFormat] = useState<SlideshowFormat>('target_avoid');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { profile } = useUserProfile();
@@ -28,14 +27,10 @@ const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPost
     return url.includes('tiktok.com') || url.includes('vm.tiktok.com');
   };
 
-  const validateInstagramUrl = (url: string): boolean => {
-    return url.includes('instagram.com');
-  };
-
   const handleSubmit = async () => {
     // Validation
-    if (!tiktokUrl.trim() || !instagramUrl.trim()) {
-      toast.error("Please enter both TikTok and Instagram URLs");
+    if (!tiktokUrl.trim()) {
+      toast.error("Please enter a TikTok URL");
       return;
     }
 
@@ -44,51 +39,34 @@ const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPost
       return;
     }
 
-    if (!validateInstagramUrl(instagramUrl)) {
-      toast.error("Invalid Instagram URL");
-      return;
-    }
-
     if (!profile) {
       toast.error("User profile not loaded");
       return;
     }
 
-    // Get user's TikTok and Instagram accounts
+    // Get user's TikTok account
     const tiktokAccount = profile.accounts.find(acc => acc.platform === 'tiktok');
-    const instagramAccount = profile.accounts.find(acc => acc.platform === 'instagram');
 
-    if (!tiktokAccount || !instagramAccount) {
-      toast.error("Please add your TikTok and Instagram accounts first");
+    if (!tiktokAccount) {
+      toast.error("Please add your TikTok account first");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // Insert both posts (TikTok + Instagram) as a slideshow pair
+      // Insert TikTok post
       const { error } = await supabase
         .from('posts')
-        .insert([
-          {
-            account_id: tiktokAccount.id,
-            submitted_by: profile.user.id,
-            url: tiktokUrl,
-            platform: 'tiktok',
-            status: 'approved',
-            content_type: 'slideshow',
-            slideshow_format: slideshowFormat,
-          },
-          {
-            account_id: instagramAccount.id,
-            submitted_by: profile.user.id,
-            url: instagramUrl,
-            platform: 'instagram',
-            status: 'approved',
-            content_type: 'slideshow',
-            slideshow_format: slideshowFormat,
-          }
-        ]);
+        .insert({
+          account_id: tiktokAccount.id,
+          submitted_by: profile.user.id,
+          url: tiktokUrl,
+          platform: 'tiktok',
+          status: 'approved',
+          content_type: 'slideshow',
+          slideshow_format: slideshowFormat,
+        });
 
       if (error) throw error;
 
@@ -96,7 +74,6 @@ const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPost
 
       // Reset form
       setTiktokUrl("");
-      setInstagramUrl("");
       setSlideshowFormat('target_avoid');
       onOpenChange(false);
 
@@ -116,8 +93,7 @@ const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPost
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-foreground mb-2">Submit Post</h2>
           <p className="text-muted-foreground text-sm">
-            Enter both TikTok and Instagram URLs<br />
-            for your post.
+            Enter your TikTok URL for your slideshow post.
           </p>
         </div>
 
@@ -152,22 +128,6 @@ const AMSubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: AMSubmitPost
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="instagramUrl" className="text-foreground text-sm">
-              Instagram URL
-            </Label>
-            <Input
-              id="instagramUrl"
-              value={instagramUrl}
-              onChange={(e) => setInstagramUrl(e.target.value)}
-              className="bg-secondary border-border h-12"
-              placeholder="https://www.instagram.com/p/..."
-            />
-          </div>
-
-          <div className="bg-secondary/50 rounded-lg p-4 text-sm text-muted-foreground text-center">
-            <p>Post the same slideshow to both platforms to track your progress</p>
-          </div>
 
           <Button
             onClick={handleSubmit}
