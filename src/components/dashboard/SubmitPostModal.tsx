@@ -47,32 +47,9 @@ const SubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: SubmitPostModa
     }
   }, [profile]);
 
-  // Auto-detect account from TikTok URL
-  useEffect(() => {
-    if (postUrl.includes('tiktok.com/@')) {
-      // Extract handle from URL: https://www.tiktok.com/@username/video/123
-      const match = postUrl.match(/tiktok\.com\/@([^\/\?]+)/);
-      if (match && match[1]) {
-        const handle = match[1];
-        // Find matching TikTok account
-        const matchingAccount = userAccounts.find(
-          acc => acc.platform === 'tiktok' && acc.handle.toLowerCase() === handle.toLowerCase()
-        );
-        if (matchingAccount) {
-          setSelectedAccountId(matchingAccount.id);
-        }
-      }
-    }
-  }, [postUrl, userAccounts]);
-
-  const detectPlatform = (url: string): 'tiktok' | 'instagram' | null => {
-    // TikTok URL patterns (including short links: vm.tiktok.com, vt.tiktok.com)
+  const detectPlatform = (url: string): 'tiktok' | 'instagram' => {
     if (url.includes('tiktok.com')) return 'tiktok';
-
-    // Instagram URL patterns (reels, posts, etc)
-    if (url.includes('instagram.com')) return 'instagram';
-
-    return null;
+    return 'instagram';
   };
 
   const handleSubmit = async () => {
@@ -96,11 +73,6 @@ const SubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: SubmitPostModa
     try {
       // Detect platform from URL
       const platform = detectPlatform(postUrl);
-      if (!platform) {
-        toast.error("Invalid URL. Please enter a TikTok or Instagram URL");
-        setIsSubmitting(false);
-        return;
-      }
 
       // Get selected account details
       const selectedAccount = userAccounts.find(acc => acc.id === selectedAccountId);
@@ -110,40 +82,7 @@ const SubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: SubmitPostModa
         return;
       }
 
-      // Verify platform matches between URL and selected account
-      if (platform !== selectedAccount.platform) {
-        toast.error(`Platform mismatch: You selected a ${selectedAccount.platform === 'tiktok' ? 'TikTok' : 'Instagram'} account but submitted a ${platform === 'tiktok' ? 'TikTok' : 'Instagram'} URL`);
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Validate TikTok URL is a video post (not a profile)
-      if (platform === 'tiktok') {
-        // Accept: full video URL OR short links (vm.tiktok.com, vt.tiktok.com)
-        const isVideoPost = /tiktok\.com\/@[^\/]+\/video\/\d+/.test(postUrl);
-        const isShortLink = /^(https?:\/\/)?(vm|vt)\.tiktok\.com\/[A-Za-z0-9]+\/?/.test(postUrl);
-        if (!isVideoPost && !isShortLink) {
-          toast.error("Please submit a TikTok video URL, not a profile. Accepted formats: https://www.tiktok.com/@username/video/123 or https://vt.tiktok.com/ABC123");
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
-      // Validate Instagram URL is a post/reel (not a profile)
-      if (platform === 'instagram') {
-        // Must have /p/, /reel/, or /reels/ in the URL to be a post
-        const isPost = /instagram\.com\/(p|reel|reels)\/[A-Za-z0-9_-]+/.test(postUrl);
-        if (!isPost) {
-          toast.error("Please submit an Instagram post/reel URL, not a profile. Expected format: https://www.instagram.com/reel/ABC123 or /p/ABC123");
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
-      // All posts are auto-approved after validation
-      const isVerified = true;
-
-      // Create post entry with auto-approval
+      // Create post entry
       const { error: postError } = await supabase
         .from('posts')
         .insert({
@@ -151,7 +90,7 @@ const SubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: SubmitPostModa
           submitted_by: profile.user.id,
           url: postUrl,
           platform: platform,
-          status: isVerified ? 'approved' : 'pending',
+          status: 'approved',
           content_type: 'ugc_video',
           notes: notes || null,
         });
@@ -161,7 +100,6 @@ const SubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: SubmitPostModa
       toast.success("Post submitted successfully! Analytics will be fetched at midnight or use 'Fetch Analytics' button.");
 
       // Send Discord congrats message (fire and forget - don't block on this)
-      // Also notifies the admin posts channel with the post URL and Make.com webhook for Notion
       supabase.functions.invoke('discord-send-dm', {
         body: {
           userId: profile.user.id,
@@ -211,7 +149,7 @@ const SubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: SubmitPostModa
               value={postUrl}
               onChange={(e) => setPostUrl(e.target.value)}
               className="bg-secondary border-border h-12"
-              placeholder="https://www.instagram.com/p/..."
+              placeholder="https://www.tiktok.com/@username/video/..."
             />
           </div>
 
@@ -237,9 +175,6 @@ const SubmitPostModal = ({ open, onOpenChange, onSubmitSuccess }: SubmitPostModa
                 )}
               </SelectContent>
             </Select>
-            <p className="text-xs text-muted-foreground">
-              * Account will be auto-selected from TikTok URLs
-            </p>
           </div>
 
           <div className="space-y-2">
