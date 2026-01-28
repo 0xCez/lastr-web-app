@@ -126,6 +126,36 @@ const LASTR_ROUTES = [
   { code: "pov", name: "POV (Aspirational)" },
 ];
 
+// Types for Timeline format (30-day journey)
+interface TimelineSlide {
+  screenNumber: number;
+  imagePath: string;
+  textOverlay: string[];
+  isHook?: boolean;
+  isFinal?: boolean;
+}
+
+interface TimelineData {
+  slides: TimelineSlide[];
+  caption: string;
+  format: string;
+  generatedAt: string;
+}
+
+// Types for Landscape format (T-O-S confession style)
+interface LandscapeSlide {
+  screenNumber: number;
+  imagePath: string;
+  textOverlay: string[];
+  isHook?: boolean;
+}
+
+interface LandscapeData {
+  slides: LandscapeSlide[];
+  caption: string;
+  generatedAt: string;
+}
+
 interface ProfileData {
   name: string;
   username: string;
@@ -157,6 +187,8 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
   const [overbetData, setOverbetData] = useState<OverbetData | null>(null);
   const [playerPropsData, setPlayerPropsData] = useState<PlayerPropsData | null>(null);
   const [lastrData, setLastrData] = useState<LastrData | null>(null);
+  const [timelineData, setTimelineData] = useState<TimelineData | null>(null);
+  const [landscapeData, setLandscapeData] = useState<LandscapeData | null>(null);
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [isGeneratingPost, setIsGeneratingPost] = useState(false);
   const [isGeneratingProfile, setIsGeneratingProfile] = useState(false);
@@ -222,9 +254,11 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
   // Check if generate button should be enabled
   // FraudWatch and Overbet require both league AND team
   // Player Props requires league (team is optional)
-  // Lastr works without any selection (route is optional)
+  // Lastr, Timeline, and Landscape work without any selection
   const canGenerate = format === "bet-apps" ||
     format === "lastr" ||
+    format === "timeline" ||
+    format === "landscape" ||
     (format === "target-avoid" && league) ||
     (format === "fraudwatch" && league && team) ||
     (format === "overbet" && league && team) ||
@@ -256,6 +290,8 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
     setOverbetData(null);
     setPlayerPropsData(null);
     setLastrData(null);
+    setTimelineData(null);
+    setLandscapeData(null);
 
     try {
       if (format === "target-avoid") {
@@ -378,6 +414,46 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
 
         const data = await response.json();
         setLastrData(data);
+      } else if (format === "timeline") {
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-timeline-slideshow`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({}),
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to generate Timeline slideshow');
+        }
+
+        const data = await response.json();
+        setTimelineData(data);
+      } else if (format === "landscape") {
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-landscape-slideshow`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({}),
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to generate Landscape slideshow');
+        }
+
+        const data = await response.json();
+        setLandscapeData(data);
       }
 
       toast.success("Slideshow generated successfully!");
@@ -397,6 +473,7 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
     setOverbetData(null);
     setPlayerPropsData(null);
     setLastrData(null);
+    setLandscapeData(null);
 
     try {
       const response = await fetch(
@@ -487,6 +564,10 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
     ? "1 hook + 6 'overbet' players (your team + rivals) + CTA — betting ragebait"
     : format === "player-props"
     ? "1 hook + 4 player prop lines (O/U quiz) + CTA — engaging prop content"
+    : format === "timeline"
+    ? "5 slides tracking transformation over 30 days — GPT-generated emotional timeline"
+    : format === "landscape"
+    ? "2 slides: confession-style hook + personal realizations — GPT-generated T-O-S format"
     : format === "lastr"
     ? lastrRoute === "tips"
       ? "1 hook + 5 instructive slides + CTA — actionable stamina tips"
@@ -524,6 +605,8 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
                 <SelectItem value="player-props">Player Props</SelectItem>
                 */}
                 <SelectItem value="lastr">Lastr (Stamina)</SelectItem>
+                <SelectItem value="timeline">Timeline (30-Day Journey)</SelectItem>
+                <SelectItem value="landscape">Landscape (Confession)</SelectItem>
               </SelectContent>
             </Select>
 
@@ -1391,6 +1474,113 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
           </div>
         )}
 
+        {/* Timeline Output */}
+        {timelineData && (
+          <div className="space-y-6 animate-fade-in-up">
+            {/* Slides Grid */}
+            <div className="glass-card p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <Image className="w-5 h-5 text-primary" />
+                <h3 className="font-semibold text-foreground">Slides ({timelineData.slides.length})</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {timelineData.slides.map((slide) => (
+                  <div key={slide.screenNumber} className="bg-secondary/30 rounded-lg p-4 border border-border/50">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className={`text-xs px-2 py-1 rounded font-medium ${
+                        slide.isHook ? 'bg-primary/20 text-primary' :
+                        slide.isFinal ? 'bg-purple-500/20 text-purple-400' :
+                        'bg-secondary text-muted-foreground'
+                      }`}>
+                        {slide.isHook ? "Hook" : slide.isFinal ? "Final" : `Slide ${slide.screenNumber}`}
+                      </span>
+                      <div className="flex gap-1">
+                        {!slide.isFinal && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-7 text-xs gap-1 text-muted-foreground hover:text-primary"
+                            onClick={() => copyToClipboard(slide.textOverlay[0] || "", "Header")}
+                          >
+                            <Copy className="w-3 h-3" />
+                            Copy Header
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs gap-1 text-muted-foreground hover:text-primary"
+                          onClick={() => copyToClipboard(slide.textOverlay.slice(2).join("\n"), slide.isFinal ? "Text" : "Lines")}
+                        >
+                          <Copy className="w-3 h-3" />
+                          {slide.isFinal ? "Copy Text" : "Copy Lines"}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <div className="flex-shrink-0">
+                        <img
+                          src={slide.imagePath}
+                          alt={slide.isFinal ? "Final Realization" : slide.isHook ? "Hook" : `Slide ${slide.screenNumber}`}
+                          className="w-56 h-72 object-cover rounded-lg bg-secondary/50"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="w-full mt-2 h-7 text-xs gap-1"
+                          onClick={() => handleDownloadImage(slide.imagePath, `Screen ${slide.screenNumber}`)}
+                        >
+                          <Download className="w-3 h-3" />
+                          Download
+                        </Button>
+                      </div>
+
+                      <div className="flex-1 flex flex-col justify-center space-y-1">
+                        {slide.textOverlay.map((text, idx) => (
+                          <p key={idx} className={
+                            text === "" ? "" :
+                            idx === 0 && text.includes("DAY") ? "text-foreground font-bold text-sm uppercase tracking-wide" :
+                            idx === 0 ? "text-foreground font-semibold text-base" :
+                            "text-sm text-muted-foreground"
+                          }>
+                            {text}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Caption Card */}
+            <div className="glass-card p-5">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Type className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-foreground">Caption</h3>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-1 text-muted-foreground hover:text-primary"
+                  onClick={() => copyToClipboard(timelineData.caption, "Caption")}
+                >
+                  <Copy className="w-3 h-3" />
+                  Copy Caption
+                </Button>
+              </div>
+              <div className="bg-secondary/30 rounded-lg p-4 border border-border/50">
+                <p className="text-foreground whitespace-pre-line text-sm">{timelineData.caption}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Profile Output */}
         {profileData && (
           <div className="glass-card p-6 md:p-8 animate-fade-in-up">
@@ -1476,15 +1666,104 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
           </div>
         )}
 
+        {/* Landscape Output */}
+        {landscapeData && (
+          <div className="space-y-6 animate-fade-in-up">
+            {/* Slides Grid */}
+            <div className="glass-card p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <Image className="w-5 h-5 text-primary" />
+                <h3 className="font-semibold text-foreground">Slides ({landscapeData.slides.length})</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {landscapeData.slides.map((slide) => (
+                  <div key={slide.screenNumber} className="bg-secondary/30 rounded-lg p-4 border border-border/50">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className={`text-xs px-2 py-1 rounded font-medium ${
+                        slide.isHook ? 'bg-primary/20 text-primary' : 'bg-purple-500/20 text-purple-400'
+                      }`}>
+                        {slide.isHook ? "Hook (Slide 1)" : "Realizations (Slide 2)"}
+                      </span>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 text-xs gap-1 text-muted-foreground hover:text-primary"
+                        onClick={() => copyToClipboard(slide.textOverlay.join("\n"), slide.isHook ? "Hook" : "Realizations")}
+                      >
+                        <Copy className="w-3 h-3" />
+                        Copy Text
+                      </Button>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <div className="flex-shrink-0">
+                        <img
+                          src={slide.imagePath}
+                          alt={slide.isHook ? "Hook" : "Realizations"}
+                          className="w-56 h-72 object-cover rounded-lg bg-secondary/50"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          className="w-full mt-2 h-7 text-xs gap-1"
+                          onClick={() => handleDownloadImage(slide.imagePath, `Slide ${slide.screenNumber}`)}
+                        >
+                          <Download className="w-3 h-3" />
+                          Download
+                        </Button>
+                      </div>
+
+                      <div className="flex-1 flex flex-col justify-center space-y-2">
+                        {slide.textOverlay.map((text, idx) => (
+                          <p key={idx} className={
+                            idx === 0 ? "text-foreground font-semibold text-base" : "text-sm text-muted-foreground"
+                          }>
+                            {text}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Caption Card */}
+            <div className="glass-card p-5">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Type className="w-5 h-5 text-primary" />
+                  <h3 className="font-semibold text-foreground">Caption</h3>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 text-xs gap-1 text-muted-foreground hover:text-primary"
+                  onClick={() => copyToClipboard(landscapeData.caption, "Caption")}
+                >
+                  <Copy className="w-3 h-3" />
+                  Copy Caption
+                </Button>
+              </div>
+              <div className="bg-secondary/30 rounded-lg p-4 border border-border/50">
+                <p className="text-foreground whitespace-pre-line text-sm">{landscapeData.caption}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Empty State */}
-        {!lastrData && !profileData && (
+        {!lastrData && !timelineData && !landscapeData && !profileData && (
           <div className="text-center py-6">
             <div className="w-12 h-12 rounded-full bg-secondary/50 flex items-center justify-center mx-auto mb-3">
               <Sparkles className="w-6 h-6 text-muted-foreground" />
             </div>
             <h3 className="text-base font-medium text-foreground mb-1">Ready to Create</h3>
             <p className="text-muted-foreground text-sm max-w-sm mx-auto">
-              Select a route (optional), then click Generate Post
+              Select a format and click Generate Post
             </p>
           </div>
         )}
