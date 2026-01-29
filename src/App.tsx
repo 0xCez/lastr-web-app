@@ -22,6 +22,7 @@ import Terms from "./pages/Terms";
 import ContentGuide from "./pages/ContentGuide";
 import SlideshowGuide from "./pages/SlideshowGuide";
 import AdminResendContracts from "./pages/AdminResendContracts";
+import AdminLastrContracts from "./pages/AdminLastrContracts";
 import EmailSender from "./pages/EmailSender";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ const App = () => (
             <Route path="/dashboard/am-payouts" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/slideshow-generator" element={<ProtectedRoute><SlideshowGenerator /></ProtectedRoute>} />
             <Route path="/admin/resend-contracts" element={<ProtectedRoute><AdminResendContracts /></ProtectedRoute>} />
+            <Route path="/admin/lastr-contracts" element={<ProtectedRoute><AdminLastrContracts /></ProtectedRoute>} />
             <Route path="/admin/email-sender" element={<ProtectedRoute><EmailSender /></ProtectedRoute>} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

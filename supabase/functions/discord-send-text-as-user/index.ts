@@ -74,15 +74,14 @@ serve(async (req) => {
 
 Great to meet u i'm cesar one of the co-founders of Lastr.
 
-Please - start by creating your TT & IG accounts.
+Please - start by creating your TikTok accounts, no Instagram for the moment.
 
-For TT: "${firstName.toLowerCase()}.lastr"
-
-For IG: "${firstName.toLowerCase()}.lastr"
+First Account name: "${firstName.toLowerCase()}.lastr"
+Second Account name: "[choose your name].lastr" (exemple: "patrick.lastr")
 
 Then you can simply download the app here: https://testflight.apple.com/join/D824t57J
 
-Warm up the accs for 24h and then you'll be ready to start posting!!! :)`
+Warm up the acc for 24h and then you'll be ready to start posting!!! :)`
 
     console.log(`Sending welcome text to channel ${channelId} for ${userName || 'unknown'}`)
 
