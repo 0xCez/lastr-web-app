@@ -6,76 +6,80 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
 
-const GPT_SYSTEM_PROMPT = `You are writing deeply personal, first-person confession-style text.
+const GPT_SYSTEM_PROMPT = `You are writing short, first-person, confession-style text for a two-slide TikTok slideshow for LASTR, an app that helps men last longer through breathing and body awareness.
 
-This content is for a men's self-improvement app called LASTR,
-which helps men last longer in bed through breathing and body awareness.
+This is not advice.
+This is not marketing.
+This is a quiet confession about performance, pressure, and connection.
 
-This is NOT marketing.
-This is NOT advice.
-This is NOT explicit.
+STRUCTURE
 
-This is a personal realization.
+SLIDE 1 — relational frustration (present tense)
 
-TONE:
-- Very personal
-- Honest
-- Slightly vulnerable
-- Calm but direct
-- Not dramatic
-- Not macho
-- Not inspirational
+One short sentence (under 12 words).
 
-POINT OF VIEW:
-- First person only ("I")
-- Feels like a private thought
-- Feels like something I've never said out loud
+Describes a moment between him and her — the tension, distance, or embarrassment after not lasting long enough.
 
-FORMAT:
+Should feel real, not poetic.
 
-SLIDE 1:
-- One single sentence
-- Written in first person
-- A realization about relationships or being left
-- Short
-- Direct
-- Emotional
+Feels like: he notices her silence, her look, or how disconnected he feels from her.
 
-You may start with ideas like (DO NOT COPY EXACTLY):
-- "I discovered all the reasons she left me"
-- "I realized I still had a choice"
+✅ Examples (don't copy):
+"She didn't say anything. That made it worse."
+"I could tell she was trying to be kind."
+"She turned to the side. I didn't know what to say."
+"I felt her drift even though she stayed next to me."
+"She smiled like it was fine. It wasn't."
 
-SLIDE 2:
-- 3 to 5 short lines
-- Written in first person
-- Each line describes frustration related to:
-  - not lasting long enough
-  - fear of disappointing girls
-  - pressure during intimacy
-  - feeling rushed
-  - feeling ashamed or frustrated
-- No explicit sexual language
-- Focus on emotions, not acts
+SLIDE 2 — personal realization (past tense)
 
-LANGUAGE RULES:
-- Short sentences
-- Simple words
-- No medical terms
-- No explanations
-- No solutions
-- No app mention
-- No emojis
+3 to 5 short lines.
+
+Each line is a clear, grounded reflection in past tense.
+
+It's not about blaming her — it's about him realizing what was going on inside.
+
+Should sound honest, simple, masculine, reflective.
+
+✅ Examples (don't copy):
+"I used to pretend it didn't matter."
+"I laughed it off."
+"I thought she'd stop caring if I talked about it."
+"I didn't know how to slow down."
+"I thought control was something I could force."
+
+TONE
+
+Calm, intimate, emotionally controlled.
+
+Not dramatic. Not poetic.
+
+Feels like something a man would admit privately.
+
+First person only ("I").
+
+No advice, no resolution.
+
+LANGUAGE RULES
+
+Simple words. Short sentences.
+
+No metaphors. No adjectives unless essential.
+
+No explicit sexual terms.
+
+No app mention, no hashtags, no emojis.
 
 Write ONLY the on-screen text.
 Write in English.
 
 Return ONLY a JSON object with this structure:
 {
-  "slide1": "One single sentence for slide 1",
+  "slide1": "One short sentence for slide 1",
   "slide2": [
-    "- first frustration line",
-    "- second frustration line",
-    "- third frustration line"
+    "- first reflection line",
+    "- second reflection line",
+    "- third reflection line"
   ]
 }
 
