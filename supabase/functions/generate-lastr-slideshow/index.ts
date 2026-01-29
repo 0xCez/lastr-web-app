@@ -192,11 +192,11 @@ const CTA_SENTENCES = [
 
 // Image folders and their counts
 const IMAGE_FOLDERS = {
-  Health: { count: 11, extension: 'jpeg' },    // Used for hook slide
-  Couple: { count: 8, extension: 'jpeg' },
-  Muscle: { count: 11, extension: 'jpeg' },
-  Room: { count: 10, extension: 'jpeg' },
-  App: { count: 1, extension: 'jpg' },         // CTA slide only
+  Health: { count: 11, extension: 'png' },    // Used for hook slide
+  Couple: { count: 8, extension: 'png' },
+  Muscle: { count: 11, extension: 'png' },
+  Room: { count: 19, extension: 'png' },
+  App: { count: 1, extension: 'png' },         // CTA slide only
 }
 
 // Middle slide folder options (for slides 2-5)
