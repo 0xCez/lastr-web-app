@@ -603,8 +603,8 @@ async function generateTimelineSlideshow(): Promise<TimelineOutput> {
       // Slide 4: Mirror
       imagePath = getRandomImagePath('Mirror')
     } else if (index === 4) {
-      // Slide 5: Specific App image (2.jpg)
-      imagePath = '/images/Lastr_pics/App/2.jpg'
+      // Slide 5: Specific App image (5.PNG)
+      imagePath = '/images/Lastr_pics/App/5.PNG'
     } else {
       // Fallback (shouldn't happen with 5 slides)
       imagePath = getRandomImagePath('Health')

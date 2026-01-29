@@ -254,13 +254,28 @@ async function generateLandscapeSlideshow(): Promise<LandscapeOutput> {
     selectedContent = getRandomItem(LANDSCAPE_SETS)
   }
 
-  // Build slides array
+  // Build slides array with unique images
   const slides: LandscapeSlide[] = []
+  const usedImages = new Set<string>()
+
+  // Helper to get unique image
+  const getUniqueImage = (): string => {
+    let imagePath: string
+    let attempts = 0
+    do {
+      imagePath = getRandomLandscapeImage()
+      attempts++
+      // Prevent infinite loop if all images are used (shouldn't happen with 9 images and 2 slides)
+      if (attempts > 50) break
+    } while (usedImages.has(imagePath))
+    usedImages.add(imagePath)
+    return imagePath
+  }
 
   // Slide 1 (Hook)
   slides.push({
     screenNumber: 1,
-    imagePath: getRandomLandscapeImage(),
+    imagePath: getUniqueImage(),
     textOverlay: [selectedContent.slide1],
     isHook: true,
   })
@@ -268,7 +283,7 @@ async function generateLandscapeSlideshow(): Promise<LandscapeOutput> {
   // Slide 2 (Realizations list)
   slides.push({
     screenNumber: 2,
-    imagePath: getRandomLandscapeImage(),
+    imagePath: getUniqueImage(),
     textOverlay: selectedContent.slide2,
     isHook: false,
   })
