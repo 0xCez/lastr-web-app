@@ -1540,16 +1540,40 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
                       </div>
 
                       <div className="flex-1 flex flex-col justify-center space-y-1">
-                        {slide.textOverlay.map((text, idx) => (
-                          <p key={idx} className={
-                            text === "" ? "" :
-                            idx === 0 && text.includes("DAY") ? "text-foreground font-bold text-sm uppercase tracking-wide" :
-                            idx === 0 ? "text-foreground font-semibold text-base" :
-                            "text-sm text-muted-foreground"
-                          }>
-                            {text}
-                          </p>
-                        ))}
+                        {slide.textOverlay.map((text, idx) => {
+                          // Skip empty lines but keep spacing
+                          if (text === "") {
+                            return <div key={idx} className="h-2" />;
+                          }
+
+                          // For slides 2-4 (not hook, not final), show copy button for each line starting from index 2
+                          const showIndividualCopy = !slide.isHook && !slide.isFinal && idx >= 2;
+
+                          return (
+                            <div key={idx} className={`flex items-start gap-2 ${showIndividualCopy ? 'group' : ''}`}>
+                              <p className={
+                                idx === 0 && text.includes("DAY") ? "text-foreground font-bold text-sm uppercase tracking-wide flex-1" :
+                                idx === 0 ? "text-foreground font-semibold text-base flex-1" :
+                                "text-sm text-muted-foreground flex-1"
+                              }>
+                                {text}
+                              </p>
+                              {showIndividualCopy && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    copyToClipboard(text, "Line");
+                                  }}
+                                >
+                                  <Copy className="w-3 h-3" />
+                                </Button>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
