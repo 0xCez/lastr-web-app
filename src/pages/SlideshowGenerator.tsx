@@ -1741,13 +1741,33 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
                       </div>
 
                       <div className="flex-1 flex flex-col justify-center space-y-2">
-                        {slide.textOverlay.map((text, idx) => (
-                          <p key={idx} className={
-                            idx === 0 ? "text-foreground font-semibold text-base" : "text-sm text-muted-foreground"
-                          }>
-                            {text}
-                          </p>
-                        ))}
+                        {slide.textOverlay.map((text, idx) => {
+                          // For slide 2 (Realizations), show copy button for each line
+                          const showIndividualCopy = !slide.isHook;
+
+                          return (
+                            <div key={idx} className={`flex items-start gap-2 ${showIndividualCopy ? 'group' : ''}`}>
+                              <p className={
+                                idx === 0 && !showIndividualCopy ? "text-foreground font-semibold text-base flex-1" : "text-sm text-muted-foreground flex-1"
+                              }>
+                                {text}
+                              </p>
+                              {showIndividualCopy && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    copyToClipboard(text, "Line");
+                                  }}
+                                >
+                                  <Copy className="w-3 h-3" />
+                                </Button>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
