@@ -233,7 +233,7 @@ function getRandomInt(min: number, max: number): number {
 
 function getRandomLandscapeImage(): string {
   const imageIndex = getRandomInt(1, 9) // 9 landscape images
-  return `/images/Lastr_pics/landscape/${imageIndex}.jpeg`
+  return `/images/Lastr_pics/landscape/${imageIndex}.png`
 }
 
 // ============================================

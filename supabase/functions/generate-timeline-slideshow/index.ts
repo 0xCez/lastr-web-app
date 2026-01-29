@@ -503,13 +503,13 @@ const TIMELINE_SETS = [
 
 // Image folders and their counts (same as Lastr)
 const IMAGE_FOLDERS = {
-  Health: { count: 11, extension: 'jpeg' },
-  Couple: { count: 8, extension: 'jpeg' },
-  Muscle: { count: 11, extension: 'jpeg' },
-  Room: { count: 10, extension: 'jpeg' },
-  Mirror: { count: 7, extension: 'jpg' },
-  Stress: { count: 5, extension: 'jpeg' },
-  Aesthetic: { count: 8, extension: 'jpeg' },
+  Health: { count: 11, extension: 'png' },
+  Couple: { count: 8, extension: 'png' },
+  Muscle: { count: 11, extension: 'png' },
+  Room: { count: 19, extension: 'png' },
+  Mirror: { count: 7, extension: 'png' },
+  Stress: { count: 6, extension: 'png' },
+  Aesthetic: { count: 7, extension: 'png' },
 }
 
 // Middle slide folder options
@@ -603,8 +603,8 @@ async function generateTimelineSlideshow(): Promise<TimelineOutput> {
       // Slide 4: Mirror
       imagePath = getRandomImagePath('Mirror')
     } else if (index === 4) {
-      // Slide 5: Specific App image (5.PNG)
-      imagePath = '/images/Lastr_pics/App/5.PNG'
+      // Slide 5: Specific App image (5.png)
+      imagePath = '/images/Lastr_pics/App/5.png'
     } else {
       // Fallback (shouldn't happen with 5 slides)
       imagePath = getRandomImagePath('Health')
