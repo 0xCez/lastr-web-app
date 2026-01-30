@@ -1796,6 +1796,24 @@ const SlideshowGenerator = ({ embedded = false }: SlideshowGeneratorProps) => {
                 <p className="text-foreground whitespace-pre-line text-sm">{landscapeData.caption}</p>
               </div>
             </div>
+
+            {/* Tutorial Video */}
+            <div className="glass-card p-5">
+              <div className="flex items-center gap-2 mb-4">
+                <h3 className="font-semibold text-foreground">Tutorial Video</h3>
+              </div>
+              <div className="bg-secondary/30 rounded-lg overflow-hidden border border-border/50 mx-auto" style={{ maxWidth: '600px' }}>
+                <video
+                  controls
+                  className="w-full"
+                  style={{ maxHeight: '400px' }}
+                  preload="metadata"
+                >
+                  <source src="/images/Lastr_pics/Tutorial%20video/landscape_tuto_vid.MP4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
           </div>
         )}
 
