@@ -185,29 +185,17 @@ const AccountView = () => {
     try {
       const handle = newTiktokHandle.trim().replace(/^@/, '');
 
-      // Create account
-      const { data: newAccount, error: accountError } = await supabase
-        .from('accounts')
-        .insert({
-          platform: 'tiktok',
-          handle,
-        })
-        .select()
-        .single();
+      // Use the add_user_account function to safely create and link the account
+      const { data, error } = await supabase.rpc('add_user_account', {
+        p_user_id: profile.user.id,
+        p_platform: 'tiktok',
+        p_handle: handle,
+      });
 
-      if (accountError) throw accountError;
+      if (error) throw error;
 
-      // Link to user
-      const { error: linkError } = await supabase
-        .from('user_accounts')
-        .insert({
-          user_id: profile.user.id,
-          account_id: newAccount.id,
-        });
-
-      if (linkError) throw linkError;
-
-      setTiktokAccounts([...tiktokAccounts, { id: newAccount.id, handle }]);
+      const newAccount = data.account;
+      setTiktokAccounts([...tiktokAccounts, { id: newAccount.id, handle: newAccount.handle }]);
       setNewTiktokHandle("");
       setIsAddingTiktok(false);
       toast.success("TikTok account added!");
@@ -224,29 +212,17 @@ const AccountView = () => {
     try {
       const handle = newIgHandle.trim().replace(/^@/, '');
 
-      // Create account
-      const { data: newAccount, error: accountError } = await supabase
-        .from('accounts')
-        .insert({
-          platform: 'instagram',
-          handle,
-        })
-        .select()
-        .single();
+      // Use the add_user_account function to safely create and link the account
+      const { data, error } = await supabase.rpc('add_user_account', {
+        p_user_id: profile.user.id,
+        p_platform: 'instagram',
+        p_handle: handle,
+      });
 
-      if (accountError) throw accountError;
+      if (error) throw error;
 
-      // Link to user
-      const { error: linkError } = await supabase
-        .from('user_accounts')
-        .insert({
-          user_id: profile.user.id,
-          account_id: newAccount.id,
-        });
-
-      if (linkError) throw linkError;
-
-      setIgAccounts([...igAccounts, { id: newAccount.id, handle }]);
+      const newAccount = data.account;
+      setIgAccounts([...igAccounts, { id: newAccount.id, handle: newAccount.handle }]);
       setNewIgHandle("");
       setIsAddingIG(false);
       toast.success("Instagram account added!");
