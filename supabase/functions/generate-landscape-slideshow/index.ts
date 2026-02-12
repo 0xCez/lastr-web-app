@@ -6,67 +6,74 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
 
-const GPT_SYSTEM_PROMPT = `You are writing short, first-person, confession-style text for a two-slide TikTok slideshow for LASTR, an app that helps men last longer through breathing and body awareness.
+const GPT_SYSTEM_PROMPT = `You are writing short, first-person, confession-style text for a two-slide TikTok slideshow for LASTR, an app that helps men with timing and control.
 
 This is not advice.
 This is not marketing.
-This is a quiet confession about performance, pressure, and connection.
+This is a raw confession about finishing too soon and what it does to a man.
 
 STRUCTURE
 
-SLIDE 1 — relational frustration (present tense)
+SLIDE 1 — the moment (present tense)
 
 One short sentence (under 12 words).
 
-Describes a moment between him and her — the tension, distance, or embarrassment after not lasting long enough.
+Describes the moment it ends too soon — the silence, the shame, or her reaction.
 
-Should feel real, not poetic.
-
-Feels like: he notices her silence, her look, or how disconnected he feels from her.
+Should feel painfully real.
 
 ✅ Examples (don't copy):
-"She didn't say anything. That made it worse."
-"I could tell she was trying to be kind."
-"She turned to the side. I didn't know what to say."
-"I felt her drift even though she stayed next to me."
-"She smiled like it was fine. It wasn't."
+"It was over before she even got started."
+"2 minutes. Every single time."
+"She said it's fine. Her face said otherwise."
+"I saw her try to hide the disappointment."
+"It ended way too soon. Again."
+"She stopped expecting anything from me."
 
-SLIDE 2 — personal realization (past tense)
+SLIDE 2 — what it did to him (past tense)
 
-3 to 5 short lines.
+Exactly 4 short lines. No more, no less.
 
-Each line is a clear, grounded reflection in past tense.
+Each line is a raw reflection about how this affected him — confidence, relationships, intimacy.
 
-It's not about blaming her — it's about him realizing what was going on inside.
-
-Should sound honest, simple, masculine, reflective.
+Should sound honest, direct, masculine.
 
 ✅ Examples (don't copy):
-"I used to pretend it didn't matter."
-"I laughed it off."
-"I thought she'd stop caring if I talked about it."
-"I didn't know how to slow down."
-"I thought control was something I could force."
+"I started avoiding intimacy."
+"I stopped initiating."
+"I felt like I was failing her every time."
+"I couldn't look at her after."
+"I made excuses to stay late at work."
+"I dreaded the moment she got close."
 
 TONE
 
-Calm, intimate, emotionally controlled.
+Direct, raw, emotionally honest.
 
-Not dramatic. Not poetic.
+Not poetic. Not soft.
 
-Feels like something a man would admit privately.
+Feels like something a man would finally admit.
 
 First person only ("I").
 
-No advice, no resolution.
+No advice, no resolution, no hope at the end.
 
 LANGUAGE RULES
 
 Simple words. Short sentences.
 
-No metaphors. No adjectives unless essential.
+Use clear language about the problem: "finishing too soon", "it ended too fast", "lasted 2 minutes", "couldn't last" — be LITERAL, not poetic.
 
-No explicit sexual terms.
+STRICTLY FORBIDDEN:
+- NO metaphors (ex: "the stopwatch stops before the race" = BAD)
+- NO poetic imagery (ex: "the silence spoke volumes" = BAD)
+- NO cryptic phrases that require interpretation
+- NO abstract concepts (ex: "time betrayed me" = BAD)
+
+GOOD examples: "I finished in 2 minutes", "It was over too fast", "She didn't even finish"
+BAD examples: "The clock ran out", "The race ended early", "Time slipped away"
+
+Avoid these flagged words: sex, orgasm, premature, ejaculation, bedroom, performance.
 
 No app mention, no hashtags, no emojis.
 
@@ -79,7 +86,8 @@ Return ONLY a JSON object with this structure:
   "slide2": [
     "- first reflection line",
     "- second reflection line",
-    "- third reflection line"
+    "- third reflection line",
+    "- fourth reflection line"
   ]
 }
 
@@ -236,7 +244,7 @@ function getRandomInt(min: number, max: number): number {
 }
 
 function getRandomLandscapeImage(): string {
-  const imageIndex = getRandomInt(1, 9) // 9 landscape images
+  const imageIndex = getRandomInt(1, 30) // 30 landscape images
   return `/images/Lastr_pics/landscape/${imageIndex}.png`
 }
 
