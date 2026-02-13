@@ -1,7 +1,3 @@
-[project]
-# Project ID from the Supabase URL: https://kaapiqtezqydymmxsyrw.supabase.co
-project_id = "kaapiqtezqydymmxsyrw"
-
 [api]
 enabled = true
 port = 54321
